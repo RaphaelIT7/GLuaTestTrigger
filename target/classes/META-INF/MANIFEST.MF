@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Build-Jdk-Spec: 19
+Class-Path: jackson-databind-2.17.1.jar jackson-annotations-2.17.1.jar j
+ ackson-core-2.17.1.jar json-20250517.jar
+Main-Class: de.Raphael.Main.Main
+Created-By: Maven Integration for Eclipse
+
