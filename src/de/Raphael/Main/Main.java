@@ -40,6 +40,11 @@ public class Main {
 		{
 			DataCache.Set("apiKey", "SETME");
 		}
+		
+		if (!DataCache.Has("appID"))
+		{
+			DataCache.Set("appID", "4000"); // Normally can be 4000 or 4020
+		}
 	}
 	
 	private static final HttpClient client = HttpClient.newHttpClient();
@@ -50,17 +55,17 @@ public class Main {
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		scheduler.scheduleAtFixedRate(() -> {
 			try {
+				CreateDefaultsIfMissing();
+				String appID = (String)DataCache.Get("appID");
 				HttpRequest request = HttpRequest.newBuilder()
-						.uri(URI.create("https://api.steamcmd.net/v1/info/4000"))
+						.uri(URI.create("https://api.steamcmd.net/v1/info/" + appID))
 						.GET()
 						.build();
 
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
+				
 				JsonNode json = mapper.readTree(response.body());
-				JsonNode dataNode = json.get("data").get("4000").get("depots").get("branches");
-
-				CreateDefaultsIfMissing();
+				JsonNode dataNode = json.get("data").get(appID).get("depots").get("branches");
 				
 				JSONArray branches = (JSONArray)DataCache.Get("branches");
 				JSONObject lastUpdates = (JSONObject)DataCache.Get("lastUpdates");
